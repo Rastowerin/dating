@@ -1,11 +1,11 @@
 from rest_framework import routers
 
-from .views import UserViewSet
+from .views import TgUserViewSet
 
 urlpatterns = []
 
 router = routers.DefaultRouter()
 
-router.register('', UserViewSet)
+router.register('', TgUserViewSet)
 
 urlpatterns += router.urls
