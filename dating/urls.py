@@ -7,5 +7,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
     path('tg_users/', include('tg_users.urls')),
-    path('', include('search.urls'))
+    path('search/', include('search.urls')),
+    path('', include('likes.urls')),
 ]

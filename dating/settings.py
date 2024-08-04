@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-&1_l*v0u3w9(n-y-jtxsbt70%#=r2l!n8yddh+oa@u9c41$722"
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 DEBUG = os.environ.get('DEBUG', False)
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django_filters",
     "tg_users",
     "search",
+    "likes",
 ]
 
 MIDDLEWARE = [

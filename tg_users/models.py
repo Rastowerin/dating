@@ -3,7 +3,27 @@ from enum import Enum
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Manager
 from django.utils.translation import gettext_lazy
+
+
+class TgUserManager(Manager):
+
+    @staticmethod
+    def check_preferences_matches(tg_user1, tg_user2):
+
+        other_sex = {
+            'MALE': 'FEMALE',
+            'FEMALE': 'MALE'
+        }[tg_user1.sex]
+
+        not_preferred_sex = {
+            'MALE': 'FEMALE',
+            'FEMALE': 'MALE',
+            'ANY': None
+        }[tg_user1.sex_preference]
+
+        return tg_user2.sex != not_preferred_sex and tg_user2.sex_preference != other_sex
 
 
 class TgUser(models.Model):
@@ -27,3 +47,5 @@ class TgUser(models.Model):
     description = models.TextField(blank=False, null=True)
     likes = models.IntegerField(blank=False, null=False, default=0)
     dislikes = models.IntegerField(blank=False, null=False, default=0)
+
+    objects = TgUserManager()

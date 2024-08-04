@@ -15,7 +15,7 @@ class SearchPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class ListUsers(ListAPIView):
+class CommonListTgUsers(ListAPIView):
 
     serializer_class = TgUserSearchSerializer
     permission_classes = [IsAdminUser]
@@ -23,9 +23,21 @@ class ListUsers(ListAPIView):
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['age']
 
+
+class ListRecommendedTgUsers(CommonListTgUsers):
+
     def get(self, request, tg_id, *args, **kwargs):
 
-        tg_users = TgUser.objects.get(tg_id=tg_id)
-        self.queryset = search_algorithm(tg_users)
+        tg_user = TgUser.objects.get(tg_id=tg_id)
+        self.queryset = search_algorithm(tg_user)
+
+        return super().get(request, *args, **kwargs)
+
+
+class ListLikedTgUsers(CommonListTgUsers):
+
+    def get(self, request, tg_id, *args, **kwargs):
+
+        self.queryset = TgUser.objects.filter(sent_likes__receiver__tg_id=tg_id)
 
         return super().get(request, *args, **kwargs)
