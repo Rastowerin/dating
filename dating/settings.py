@@ -1,5 +1,11 @@
+import os
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
+
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,13 +17,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-&1_l*v0u3w9(n-y-jtxsbt70%#=r2l!n8yddh+oa@u9c41$722"
 
-# SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
+DEBUG = os.environ.get('DEBUG', False)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -69,17 +72,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dating.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "1",
-        "HOST": "localhost",
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv('DB_USER'),
+        "PASSWORD": os.getenv('DB_PASSWORD'),
+        "HOST": os.getenv('DB_HOST', 'localhost'),
         "PORT": "5432",
     }
 }
