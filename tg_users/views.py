@@ -19,13 +19,5 @@ class TgUserViewSet(ModelViewSet):
         super(TgUserViewSet, self).create(request, *args, **kwargs)
         tg_user = TgUser.objects.get(tg_id=request.data['tg_id'])
 
-        images = request.data['images']
-
-        for image_url in images:
-
-            image_bytes = requests.get(image_url).content
-            image = SimpleUploadedFile("image", image_bytes, content_type='image/jpeg')
-            TgUserImage.objects.create(tg_user=tg_user, image=image)
-
         headers = self.get_success_headers(request.data)
         return Response(TgUserSerializer(tg_user).data, status=status.HTTP_201_CREATED, headers=headers)
