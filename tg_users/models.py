@@ -1,5 +1,3 @@
-from enum import Enum
-
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -55,3 +53,11 @@ class TgUser(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class TgUserImage(models.Model):
+    tg_user = models.ForeignKey(TgUser, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
+
+    def __str__(self):
+        return f"Image for {self.tg_user}"

@@ -5,9 +5,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 
-from reactions.models import Reaction
 from tg_users.models import TgUser
-from tg_users.serializers import TgUserSearchSerializer
+from tg_users.serializers import TgUserSerializer
 from search.algorithm import search_algorithm
 
 
@@ -19,7 +18,7 @@ class SearchPagination(PageNumberPagination):
 
 class CommonListTgUsers(ListAPIView):
 
-    serializer_class = TgUserSearchSerializer
+    serializer_class = TgUserSerializer
     permission_classes = [IsAdminUser]
     pagination_class = SearchPagination
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]

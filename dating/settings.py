@@ -44,6 +44,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "dating.urls"
@@ -53,6 +55,15 @@ ACCOUNT_USER_MODEL_EMAIL_FIELD = None
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
+
+AWS_ACCESS_KEY_ID = 'YCAJECVZZdaPQclTRFq8nhzwy'
+AWS_SECRET_ACCESS_KEY = 'YCMTe8z4za7OvsDPCny7KuAIUVYnW-50q7XJfIQE'
+AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
+AWS_STORAGE_BUCKET_NAME = 'dating-bot'
+AWS_S3_REGION_NAME = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
 
 TEMPLATES = [
     {
@@ -110,6 +121,20 @@ REST_FRAMEWORK = {
     "TIME_FORMAT": "%H:%M",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_KEY_PREFIX = ""
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

@@ -106,7 +106,10 @@ class TestTgUsers(APITestCaseWithAuth):
 
         excepted = [
             {
-                **recommended_user_data
+                **recommended_user_data,
+                'likes': 0,
+                'dislikes': 0,
+                'images': []
             },
         ]
 
@@ -156,7 +159,10 @@ class TestTgUsers(APITestCaseWithAuth):
 
         excepted = [
             {
-                **user_sent_like_data
+                **user_sent_like_data,
+                'likes': 0,
+                'dislikes': 0,
+                'images': []
             },
         ]
 

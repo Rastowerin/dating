@@ -4,6 +4,7 @@ services:
 
   web:
     build: .
+    container_name: datingBackend
     command: bash -c "
                python manage.py makemigrations &&
                python manage.py migrate && 
@@ -27,6 +28,7 @@ services:
       - BASE_URL=http://127.0.0.1:8000
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:latest
@@ -37,3 +39,9 @@ services:
       POSTGRES_USER: dbuser
     ports:
       - "5432:5432"
+
+  redis:
+    image: "redis:latest"
+    container_name: datingRedis
+    ports:
+      - "6379:6379"

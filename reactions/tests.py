@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from rest_framework import status
 
 from dating.default_tests_setup import APITestCaseWithAuth
-from tg_users.serializers import TgUserCreateSerializer
+from tg_users.serializers import TgUserSerializer
 
 load_dotenv()
 BASE_URl = os.getenv('BASE_URL')
@@ -47,7 +47,7 @@ class LikeTests(APITestCaseWithAuth):
 
         data_list = [sender_data, receiver_data, bad_receiver_data]
 
-        serializer = TgUserCreateSerializer(data=data_list, many=True)
+        serializer = TgUserSerializer(data=data_list, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
