@@ -15,7 +15,7 @@ class LikeTests(APITestCaseWithAuth):
     def setUp(self):
         super().setUp()
 
-        sender_data = {
+        self.sender_data = {
             "tg_id": 148832269,
             "full_name": "Eblan Eblanovich",
             "sex": "MALE",
@@ -25,7 +25,7 @@ class LikeTests(APITestCaseWithAuth):
             "description": "test_description"
         }
 
-        receiver_data = {
+        self.receiver_data = {
             "tg_id": 148832270,
             "full_name": "Eblan Eblanovich",
             "sex": "FEMALE",
@@ -35,7 +35,7 @@ class LikeTests(APITestCaseWithAuth):
             "description": "test_description"
         }
 
-        bad_receiver_data = {
+        self.bad_receiver_data = {
             "tg_id": 148832271,
             "full_name": "Eblan Eblanovich",
             "sex": "FEMALE",
@@ -45,7 +45,7 @@ class LikeTests(APITestCaseWithAuth):
             "description": "test_description"
         }
 
-        data_list = [sender_data, receiver_data, bad_receiver_data]
+        data_list = [self.sender_data, self.receiver_data, self.bad_receiver_data]
 
         serializer = TgUserSerializer(data=data_list, many=True)
         serializer.is_valid(raise_exception=True)
@@ -54,8 +54,8 @@ class LikeTests(APITestCaseWithAuth):
     def test_likes(self):
 
         data = {
-            'sender': 148832269,
-            'receiver': 148832270,
+            'sender': self.sender_data['tg_id'],
+            'receiver': self.receiver_data['tg_id'],
             'type': 'LIKE'
         }
 
@@ -67,8 +67,8 @@ class LikeTests(APITestCaseWithAuth):
         self.assertEqual(response.data['non_field_errors'][0], 'Reaction already exists')
 
         data = {
-            'sender': 148832269,
-            'receiver': 148832271,
+            'sender': self.sender_data['tg_id'],
+            'receiver': self.bad_receiver_data['tg_id'],
             'type': 'LIKE'
         }
 
