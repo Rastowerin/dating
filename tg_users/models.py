@@ -60,4 +60,4 @@ class TgUserImage(models.Model):
     image = models.ImageField(upload_to='images/')
 
     def __str__(self):
-        return f"Image for {self.tg_user}"
+        return self.image.url

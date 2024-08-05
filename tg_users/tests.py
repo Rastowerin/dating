@@ -1,13 +1,26 @@
+import os
+
 from django.core.files.uploadedfile import SimpleUploadedFile
+from dotenv import load_dotenv
+from rest_framework import status
 
 from dating import settings
 from dating.default_tests_setup import APITestCaseWithAuth
-from tg_users.models import TgUser, TgUserImage
+
+load_dotenv()
+BASE_URl = os.getenv('BASE_URL', 'http://localhost:8000')
 
 
 class TestTgUsers(APITestCaseWithAuth):
 
     def test_create(self):
+
+        image_file = SimpleUploadedFile(
+            name='test_files/test.jpg',
+            content=b'file_content',
+            content_type='image/jpeg'
+        )
+
         data = {
             "tg_id": 148832269,
             "full_name": "Eblan Eblanovich",
@@ -16,28 +29,16 @@ class TestTgUsers(APITestCaseWithAuth):
             "age": 54,
             "city": "Perm`",
             "description": "test",
+            "images": [image_file],
         }
 
-        tg_user = TgUser.objects.create(**data)
-        tg_user.save()
+        response = self.client.post(f"{BASE_URl}/tg_users/", data=data, files={"images": [image_file]})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        image_file = SimpleUploadedFile(
-            name='test_files/test.jpg',
-            content=b'file_content',
-            content_type='image/jpeg'
-        )
+        response = self.client.get(f"{BASE_URl}/tg_users/{data['tg_id']}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        image_data = {
-            "id": 1,
-            "image": image_file
-        }
-
-        TgUserImage(**image_data, tg_user=tg_user).save()
-
-        response = self.client.get(f"http://127.0.0.1:8000/tg_users/{tg_user.tg_id}/")
         response_data = response.json()
-
-        self.assertEqual(response.status_code, 200)
 
         excepted = {
             **data,
