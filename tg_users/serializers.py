@@ -5,6 +5,9 @@ from tg_users.models import TgUser
 
 class TgUserSerializer(serializers.ModelSerializer):
 
+    likes = serializers.ReadOnlyField()
+    dislikes = serializers.ReadOnlyField()
+
     class Meta:
         fields = '__all__'
         model = TgUser
@@ -13,19 +16,19 @@ class TgUserSerializer(serializers.ModelSerializer):
 class TgUserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        exclude = ['likes', 'dislikes']
+        fields = '__all__'
         model = TgUser
 
 
 class TgUserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        exclude = ['tg_id', 'likes', 'dislikes']
+        fields = '__all__'
         model = TgUser
 
 
 class TgUserSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
-        exclude = ['likes', 'dislikes']
+        fields = '__all__'
         model = TgUser

@@ -11,7 +11,6 @@ class TgUserManager(Manager):
 
     @staticmethod
     def check_preferences_matches(tg_user1, tg_user2):
-
         other_sex = {
             'MALE': 'FEMALE',
             'FEMALE': 'MALE'
@@ -27,7 +26,6 @@ class TgUserManager(Manager):
 
 
 class TgUser(models.Model):
-
     class Sex(models.TextChoices):
         MALE = 'MALE', gettext_lazy('Male')
         FEMALE = 'FEMALE', gettext_lazy('Female')
@@ -38,14 +36,22 @@ class TgUser(models.Model):
         ANY = 'ANY', gettext_lazy('Any')
 
     tg_id = models.IntegerField(unique=True, primary_key=True)
-    full_name = models.CharField(max_length=255, blank=False, null=True)
-    age = models.IntegerField(blank=False, null=True)
-    city = models.CharField(max_length=50, blank=False, null=True)
-    location = models.CharField(max_length=50, blank=False, null=True)
+    full_name = models.CharField(max_length=255, blank=False, null=False)
+    age = models.IntegerField(blank=False, null=False)
+    city = models.CharField(max_length=50, blank=False, null=False)
     sex = models.CharField(max_length=50, blank=False, null=False, choices=Sex.choices)
     sex_preference = models.CharField(max_length=50, blank=False, null=False, choices=SexPreference.choices)
-    description = models.TextField(blank=False, null=True)
-    likes = models.IntegerField(blank=False, null=False, default=0)
-    dislikes = models.IntegerField(blank=False, null=False, default=0)
+    description = models.TextField(blank=False, null=False)
+
+    @property
+    def likes(self):
+        return self.received_reactions.filter(type='LIKE').count()
+
+    @property
+    def dislikes(self):
+        return self.received_reactions.filter(type='DISLIKE').count()
 
     objects = TgUserManager()
+
+    def __str__(self):
+        return self.full_name

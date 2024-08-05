@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     "django_filters",
     "tg_users",
     "search",
-    "likes",
+    "reactions",
 ]
 
 MIDDLEWARE = [

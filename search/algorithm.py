@@ -13,12 +13,14 @@ def search_algorithm(tg_user: TgUser):
         'ANY': None
     }[tg_user.sex_preference]
 
-    tg_users_who_liked = TgUser.objects.filter(sent_likes__receiver=tg_user)
+    already_react = TgUser.objects.filter(received_reactions__sender__tg_id=tg_user.tg_id)
+    reacted_tg_users = TgUser.objects.filter(sent_reactions__receiver=tg_user)
 
     return (TgUser.objects
             .exclude(tg_id=tg_user.tg_id).filter()
             .filter(city=tg_user.city)
             .exclude(sex=not_preferred_sex)
             .exclude(sex_preference=other_sex)
-            .exclude(tg_id__in=tg_users_who_liked)
+            .exclude(tg_id__in=already_react)
+            .exclude(tg_id__in=reacted_tg_users)
             )

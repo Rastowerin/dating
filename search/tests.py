@@ -1,13 +1,11 @@
 import os
 
-from django.contrib.auth.models import User
 from dotenv import load_dotenv
 from rest_framework import status
 
 from dating.default_tests_setup import APITestCaseWithAuth
-from likes.models import Like
+from reactions.models import Reaction
 from tg_users.models import TgUser
-from tg_users.serializers import TgUserCreateSerializer
 
 load_dotenv()
 BASE_URl = os.getenv('BASE_URL')
@@ -24,7 +22,6 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "FEMALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -35,7 +32,16 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "MALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
+            "description": "test_description"
+        }
+
+        disliked_user_data = {
+            "tg_id": 1488321323,
+            "full_name": "Eblan Eblanovich 123",
+            "sex": "FEMALE",
+            "sex_preference": "MALE",
+            "age": 54,
+            "city": "Perm`",
             "description": "test_description"
         }
 
@@ -46,7 +52,6 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "MALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -57,7 +62,6 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "FEMALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -68,25 +72,30 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "MALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
         data_list = [
             self_data,
             recommended_user_data,
+            disliked_user_data,
             not_recommended_user_data1,
             not_recommended_user_data2,
             user_sent_like_data,
         ]
 
-        serializer = TgUserCreateSerializer(data=data_list, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        list(map(lambda data: TgUser.objects.create(**data), data_list))
 
-        Like.objects.create(
+        Reaction.objects.create(
             sender=TgUser(**user_sent_like_data),
-            receiver=TgUser(**self_data)
+            receiver=TgUser(**self_data),
+            type='LIKE'
+        )
+
+        Reaction.objects.create(
+            sender=TgUser(**self_data),
+            receiver=TgUser(**disliked_user_data),
+            type='DISLIKE'
         )
 
         response = self.client.get(f"{BASE_URl}/search/recommended/{self_data['tg_id']}?ordering=age", follow=True)
@@ -113,7 +122,6 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "FEMALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -124,7 +132,6 @@ class TestTgUsers(APITestCaseWithAuth):
             "sex_preference": "MALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -133,13 +140,12 @@ class TestTgUsers(APITestCaseWithAuth):
             user_sent_like_data,
         ]
 
-        serializer = TgUserCreateSerializer(data=data_list, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        list(map(lambda data: TgUser.objects.create(**data), data_list))
 
-        Like.objects.create(
+        Reaction.objects.create(
             sender=TgUser(**user_sent_like_data),
-            receiver=TgUser(**self_data)
+            receiver=TgUser(**self_data),
+            type='LIKE'
         )
 
         response = self.client.get(f"{BASE_URl}/search/liked/{self_data['tg_id']}?ordering=age", follow=True)

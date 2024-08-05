@@ -22,7 +22,6 @@ class LikeTests(APITestCaseWithAuth):
             "sex_preference": "FEMALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -33,7 +32,6 @@ class LikeTests(APITestCaseWithAuth):
             "sex_preference": "MALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -44,7 +42,6 @@ class LikeTests(APITestCaseWithAuth):
             "sex_preference": "FEMALE",
             "age": 54,
             "city": "Perm`",
-            "location": "59.973871, 30.316447",
             "description": "test_description"
         }
 
@@ -58,19 +55,23 @@ class LikeTests(APITestCaseWithAuth):
 
         data = {
             'sender': 148832269,
-            'receiver': 148832270
+            'receiver': 148832270,
+            'type': 'LIKE'
         }
 
-        response = self.client.post(f'{BASE_URl}/likes/', data=data)
+        response = self.client.post(f'{BASE_URl}/reactions/', data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        response = self.client.post(f'{BASE_URl}/likes/', data=data)
+        response = self.client.post(f'{BASE_URl}/reactions/', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['non_field_errors'][0], 'Reaction already exists')
 
         data = {
             'sender': 148832269,
-            'receiver': 148832271
+            'receiver': 148832271,
+            'type': 'LIKE'
         }
 
-        response = self.client.post(f'{BASE_URl}/likes/', data=data)
+        response = self.client.post(f'{BASE_URl}/reactions/', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['non_field_errors'][0], 'Users preferences do not match')

@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
+
+from reactions.models import Reaction
 from tg_users.models import TgUser
 from tg_users.serializers import TgUserSearchSerializer
 from search.algorithm import search_algorithm
@@ -38,6 +40,6 @@ class ListLikedTgUsers(CommonListTgUsers):
 
     def get(self, request, tg_id, *args, **kwargs):
 
-        self.queryset = TgUser.objects.filter(sent_likes__receiver__tg_id=tg_id)
+        self.queryset = TgUser.objects.filter(sent_reactions__receiver__tg_id=tg_id, sent_reactions__type='LIKE')
 
         return super().get(request, *args, **kwargs)

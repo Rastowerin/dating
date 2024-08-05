@@ -8,5 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tg_users/', include('tg_users.urls')),
     path('search/', include('search.urls')),
-    path('', include('likes.urls')),
+    path('', include('reactions.urls')),
 ]
