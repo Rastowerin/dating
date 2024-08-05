@@ -11,9 +11,18 @@ class TgUserImageSerializer(serializers.ModelSerializer):
 
 class TgUserSerializer(serializers.ModelSerializer):
 
-    images = TgUserImageSerializer(many=True, required=False)
+    images = TgUserImageSerializer(many=True, read_only=True)
     likes = serializers.ReadOnlyField()
     dislikes = serializers.ReadOnlyField()
+
+    class Meta:
+        fields = '__all__'
+        model = TgUser
+
+
+class TgUserCreateSerializer(serializers.ModelSerializer):
+
+    images = TgUserImageSerializer(many=True, required=False)
 
     class Meta:
         fields = '__all__'
