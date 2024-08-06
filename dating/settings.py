@@ -44,9 +44,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.cache.UpdateCacheMiddleware",
-    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
+
+if DEBUG is False:
+    MIDDLEWARE += [
+        "django.middleware.cache.UpdateCacheMiddleware",
+        "django.middleware.cache.FetchFromCacheMiddleware",
+    ]
 
 ROOT_URLCONF = "dating.urls"
 
@@ -56,8 +60,8 @@ LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
 
-AWS_ACCESS_KEY_ID = 'YCAJECVZZdaPQclTRFq8nhzwy'
-AWS_SECRET_ACCESS_KEY = 'YCMTe8z4za7OvsDPCny7KuAIUVYnW-50q7XJfIQE'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
 AWS_STORAGE_BUCKET_NAME = 'dating-bot'
 AWS_S3_REGION_NAME = None
