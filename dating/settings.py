@@ -20,7 +20,7 @@ SECRET_KEY = "django-insecure-&1_l*v0u3w9(n-y-jtxsbt70%#=r2l!n8yddh+oa@u9c41$722
 
 ALLOWED_HOSTS = ["*"]
 
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = os.environ.get("DEBUG", "False")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -48,7 +48,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-if DEBUG is False:
+if DEBUG is "False":
     MIDDLEWARE += [
         "django.middleware.cache.UpdateCacheMiddleware",
         "django.middleware.cache.FetchFromCacheMiddleware",
@@ -106,7 +106,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=28),
 }
 
-PRODUCTION = os.getenv("PRODUCTION", False)
+PRODUCTION = os.getenv("PRODUCTION", "False")
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
