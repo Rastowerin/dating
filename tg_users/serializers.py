@@ -1,3 +1,5 @@
+import base64
+
 import requests
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import serializers
@@ -32,8 +34,8 @@ class TgUserSerializer(serializers.ModelSerializer):
 
         for image_url in images:
 
-            image_bytes = requests.get(image_url).content
-            image = SimpleUploadedFile("image", image_bytes, content_type='image/jpeg')
+            image_data = base64.b64decode(image_url.split(',')[1])
+            image = SimpleUploadedFile("image", image_data, content_type='image/jpeg')
 
             TgUserImage.objects.create(tg_user=instance, image=image)
 
