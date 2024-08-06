@@ -2,10 +2,10 @@ from rest_framework import routers
 
 from .views import TgUserViewSet
 
-urlpatterns = []
-
 router = routers.DefaultRouter()
 
-router.register('', TgUserViewSet)
+router.register('', TgUserViewSet, basename='TgUser')
 
-urlpatterns += router.urls
+urlpatterns = [
+    *router.urls,
+]

@@ -1,10 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.generics import ListAPIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
-
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import ListModelMixin
+from rest_framework.decorators import action, api_view
 from tg_users.models import TgUser
 from tg_users.serializers import TgUserSerializer
 from search.algorithm import search_algorithm
@@ -16,29 +16,27 @@ class SearchPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class CommonListTgUsers(ListAPIView):
+def common_search(request, queryset):
 
-    serializer_class = TgUserSerializer
-    permission_classes = [IsAdminUser]
-    pagination_class = SearchPagination
-    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['age']
+    ordering = request.query_params.get('ordering', None)
+    if ordering:
+        queryset = queryset.order_by(ordering)
 
+    paginator = SearchPagination()
+    paginated_queryset = paginator.paginate_queryset(queryset, request)
 
-class ListRecommendedTgUsers(CommonListTgUsers):
-
-    def get(self, request, tg_id, *args, **kwargs):
-
-        tg_user = TgUser.objects.get(tg_id=tg_id)
-        self.queryset = search_algorithm(tg_user)
-
-        return super().get(request, *args, **kwargs)
+    serializer = TgUserSerializer(paginated_queryset, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
 
-class ListLikedTgUsers(CommonListTgUsers):
+@api_view(['GET'])
+def recommended(request, tg_id):
+    tg_user = TgUser.objects.get(tg_id=tg_id)
+    queryset = search_algorithm(tg_user)
+    return common_search(request, queryset)
 
-    def get(self, request, tg_id, *args, **kwargs):
 
-        self.queryset = TgUser.objects.filter(sent_reactions__receiver__tg_id=tg_id, sent_reactions__type='LIKE')
-
-        return super().get(request, *args, **kwargs)
+@api_view(['GET'])
+def liked(request, tg_id):
+    queryset = TgUser.objects.filter(sent_reactions__receiver__tg_id=tg_id, sent_reactions__type='LIKE')
+    return common_search(request, queryset)

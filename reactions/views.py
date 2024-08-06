@@ -1,9 +1,9 @@
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.viewsets import ModelViewSet
 
-from reactions.serializers import ReactionCreateSerializer
+from reactions.models import Reaction
+from reactions.serializers import ReactionSerializer
 
 
-class CreateReactions(CreateAPIView):
-    serializer_class = ReactionCreateSerializer
-    permission_classes = [IsAdminUser]
+class ReactionViewSet(ModelViewSet):
+    queryset = Reaction.objects.all()
+    serializer_class = ReactionSerializer

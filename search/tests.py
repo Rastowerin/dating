@@ -25,12 +25,22 @@ class TestTgUsers(APITestCaseWithAuth):
             "description": "test_description"
         }
 
-        recommended_user_data = {
-            "tg_id": 148832212,
+        recommended_user_data1 = {
+            "tg_id": 12312,
             "full_name": "Eblan Eblanovich 2",
             "sex": "FEMALE",
             "sex_preference": "MALE",
             "age": 54,
+            "city": "Perm`",
+            "description": "test_description"
+        }
+
+        recommended_user_data2 = {
+            "tg_id": 151234123,
+            "full_name": "Eblan Eblanovich 2.2",
+            "sex": "FEMALE",
+            "sex_preference": "MALE",
+            "age": 11,
             "city": "Perm`",
             "description": "test_description"
         }
@@ -77,7 +87,8 @@ class TestTgUsers(APITestCaseWithAuth):
 
         data_list = [
             self_data,
-            recommended_user_data,
+            recommended_user_data1,
+            recommended_user_data2,
             disliked_user_data,
             not_recommended_user_data1,
             not_recommended_user_data2,
@@ -106,14 +117,20 @@ class TestTgUsers(APITestCaseWithAuth):
 
         excepted = [
             {
-                **recommended_user_data,
+                **recommended_user_data2,
+                'likes': 0,
+                'dislikes': 0,
+                'images': []
+            },
+            {
+                **recommended_user_data1,
                 'likes': 0,
                 'dislikes': 0,
                 'images': []
             },
         ]
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertDictEqual(results[0], excepted[0])
 
     def test_liked(self):

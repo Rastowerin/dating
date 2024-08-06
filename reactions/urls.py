@@ -1,5 +1,11 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .views import CreateReactions
+from .views import ReactionViewSet
 
-urlpatterns = [path('reactions/', CreateReactions.as_view(), name='create-reactions')]
+router = DefaultRouter()
+router.register('', ReactionViewSet, basename='Reaction')
+
+urlpatterns = [
+    *router.urls,
+]

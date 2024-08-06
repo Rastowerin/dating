@@ -7,14 +7,7 @@ from rest_framework.serializers import ModelSerializer
 from reactions.models import Reaction
 from tg_users.models import TgUser
 
-
-class ReactionReadSerializer(ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = Reaction
-
-
-class ReactionCreateSerializer(ModelSerializer):
+class ReactionSerializer(ModelSerializer):
 
     def validate(self, attrs):
 
@@ -36,5 +29,5 @@ class ReactionCreateSerializer(ModelSerializer):
         return attrs
 
     class Meta:
-        exclude = ['sent_at']
+        fields = '__all__'
         model = Reaction
