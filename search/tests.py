@@ -120,13 +120,15 @@ class TestTgUsers(APITestCaseWithAuth):
                 **recommended_user_data2,
                 'likes': 0,
                 'dislikes': 0,
-                'images': []
+                'images': [],
+                'videos': []
             },
             {
                 **recommended_user_data1,
                 'likes': 0,
                 'dislikes': 0,
-                'images': []
+                'images': [],
+                'videos': []
             },
         ]
 
@@ -179,7 +181,8 @@ class TestTgUsers(APITestCaseWithAuth):
                 **user_sent_like_data,
                 'likes': 0,
                 'dislikes': 0,
-                'images': []
+                'images': [],
+                'videos': []
             },
         ]
 

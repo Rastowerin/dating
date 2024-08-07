@@ -41,6 +41,7 @@ class TestTgUsers(APITestCaseWithAuth):
             **data,
             "likes": 0,
             "dislikes": 0,
+            "videos": []
         }
         del excepted["images"]
 

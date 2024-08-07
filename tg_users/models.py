@@ -59,3 +59,11 @@ class TgUserImage(models.Model):
 
     def __str__(self):
         return self.image.url
+
+
+class TgUserVideo(models.Model):
+    tg_user = models.ForeignKey(TgUser, related_name='videos', on_delete=models.CASCADE)
+    video = models.FileField(upload_to='videos/')
+
+    def __str__(self):
+        return self.video.url
