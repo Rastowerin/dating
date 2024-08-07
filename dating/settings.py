@@ -7,14 +7,8 @@ import dj_database_url
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-&1_l*v0u3w9(n-y-jtxsbt70%#=r2l!n8yddh+oa@u9c41$722"
 
 
@@ -102,18 +96,15 @@ DATABASES = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=28),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1e6),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1e6),
 }
 
 PRODUCTION = os.getenv("PRODUCTION", "False")
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        {
-            'True': "rest_framework.permissions.IsAdminUser",
-            'False': "rest_framework.permissions.AllowAny",
-        }[PRODUCTION],
+        "rest_framework.permissions.IsAdminUser",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
