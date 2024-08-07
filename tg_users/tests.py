@@ -12,7 +12,7 @@ BASE_URl = os.getenv('BASE_URL', 'http://localhost:8000')
 class TestTgUsers(APITestCaseWithAuth):
 
     def test_create(self):
-        image_url = open('test_files//img_url.txt', 'r').read()
+        image_base64 = open('test_files//img_url.txt', 'r').read()
 
         data = {
             "tg_id": 148832269,
@@ -23,7 +23,9 @@ class TestTgUsers(APITestCaseWithAuth):
             "city": "Perm`",
             "description": "test",
             "images": [
-                image_url,
+                {
+                    "image": image_base64,
+                },
             ],
         }
 
@@ -47,8 +49,8 @@ class TestTgUsers(APITestCaseWithAuth):
         self.assertEqual(len(images), len(data["images"]))
 
         for image_url in images:
-            self.assertTrue(image_url.startswith(
-                "https://storage.yandexcloud.net/dating-bot/images/image?AWSAccessKeyId="
+            self.assertTrue(image_url['image'].startswith(
+                "https://storage.yandexcloud.net/dating-bot/images/"
             ))
 
         self.assertDictEqual(response_data, excepted)

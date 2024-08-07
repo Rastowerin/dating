@@ -1,10 +1,5 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import IsAdminUser
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import ListModelMixin
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import api_view
 from tg_users.models import TgUser
 from tg_users.serializers import TgUserSerializer
 from search.algorithm import search_algorithm

@@ -11,7 +11,7 @@ class ReactionsManager(Manager):
 
 
 class Reaction(models.Model):
-    
+
     class Types(models.TextChoices):
         LIKE = ('LIKE', 'like')
         DISLIKE = ('DISLIKE', 'dislike')

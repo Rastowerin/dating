@@ -48,7 +48,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-if DEBUG is "False":
+if DEBUG == "False":
     MIDDLEWARE += [
         "django.middleware.cache.UpdateCacheMiddleware",
         "django.middleware.cache.FetchFromCacheMiddleware",

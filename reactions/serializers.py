@@ -7,6 +7,7 @@ from rest_framework.serializers import ModelSerializer
 from reactions.models import Reaction
 from tg_users.models import TgUser
 
+
 class ReactionSerializer(ModelSerializer):
 
     def validate(self, attrs):
